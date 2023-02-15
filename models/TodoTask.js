@@ -1,3 +1,4 @@
+// schema for db todo item
 const mongoose = require('mongoose');
 const todoTaskSchema = new mongoose.Schema({
 content: {

@@ -1,4 +1,5 @@
 // Require express dependencies
+// #Require allows for dependencies to be checked by first loading and caching needd modules. 
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
@@ -28,6 +29,7 @@ mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {
 app.set("view engine", "ejs");
 
 // GET method
+// #Get allows for returning a specific element from existing elements
 app.get("/", (req, res) => {
     TodoTask.find({}, (err, tasks) => {
         res.render("todo.ejs", { todoTasks: tasks });
@@ -35,12 +37,14 @@ app.get("/", (req, res) => {
 });
 
 // POST method
+// #Post allows for posting data to the server. Here we save any newly created todo, and then post the app. 
 app.post('/',async (req, res) => {
     const todoTask = new TodoTask({
         content: req.body.content
     });
     try {
         // New todo is saved to database
+        // #Await allows for unwrapping of promises. Here, we wait for the new todo to be saved before redirecting to the homepage
         await todoTask.save();
         res.redirect("/");
     } catch (err) {
@@ -52,6 +56,7 @@ app.post('/',async (req, res) => {
 app
 .route("/edit/:id")
 // First get id
+// #Get allows for returning a specific element from existing elements; Here, we get the id of the item first
 .get((req, res) => {
     const id = req.params.id;
     TodoTask.find({}, (err, tasks) => {
@@ -59,6 +64,7 @@ app
     });
 })
 // Update the task using findByIdAndUpdate
+// #Post allows for posting data to the server. Here we post the update of the todo to the server
 .post((req, res) => {
     const id = req.params.id;
     TodoTask.findByIdAndUpdate(id, { content: req.body.content }, err => {
@@ -68,6 +74,7 @@ app
 });
 
 // DELETE method
+// #Routes
 app.route("/remove/:id").get((req, res) => {
     // Find id
     const id = req.params.id;
